@@ -5,8 +5,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "tb_usuario")
@@ -16,16 +19,17 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@NotNull
+	@NotBlank(message = "O atributo Nome é Obrigatório!")
 	@Size(min = 2, max = 100)
 	private String nome;
 	
-	@NotNull
-	@Size(min = 5, max = 100)
+	@ApiModelProperty(example = "email@email.com.br")
+	@NotBlank(message = "O atributo Usuário é Obrigatório!")
+	@Email(message = "O atributo Usuário deve ser um email válido!")
 	private String usuario;
 	
-	@NotNull
-	@Size(min = 5, max = 100)
+	@NotBlank(message = "O atributo Senha é Obrigatória!")
+	@Size(min = 8, message = "A senha deve ser no mínimo 8 caracteres.")
 	private String senha;
 	
 
