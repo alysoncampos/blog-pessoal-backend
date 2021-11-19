@@ -42,16 +42,13 @@ public class UsuarioControllerTest {
 	@BeforeAll
 	public void start(){
 		
-		LocalDate dataAdmin = LocalDate.parse("1990-07-22",
-		DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		usuarioAdmin = new Usuario(0L, "Administrador",
-		"admin@email.com.br", "admin123", dataAdmin);
+		LocalDate dataAdmin = LocalDate.parse("1990-07-22", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		usuarioAdmin = new Usuario(0L, "Administrador", "admin@email.com.br", "admin123", dataAdmin);
 		
 		if(!usuarioRepository.findByUsuario(usuarioAdmin.getUsuario()).isPresent()) {
 				
 		HttpEntity<Usuario> request = new HttpEntity<Usuario>(usuarioAdmin);
-		testRestTemplate
-		.exchange("/usuarios/cadastrar", HttpMethod.POST, request, Usuario.class);
+		testRestTemplate.exchange("/usuarios/cadastrar", HttpMethod.POST, request, Usuario.class);
 				
 		}
 	
@@ -70,18 +67,19 @@ public class UsuarioControllerTest {
 		
 		HttpEntity<Usuario> request = new HttpEntity<Usuario>(usuario);
 		
-		ResponseEntity<Usuario> resposta = testRestTemplate 
-		.exchange("/usuarios/cadastrar", HttpMethod.POST, request, Usuario.class);
+		ResponseEntity<Usuario> resposta = testRestTemplate .exchange("/usuarios/cadastrar", HttpMethod.POST, request, Usuario.class);
+		
 		assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
+		
 	}
 
 	@Test
 	@Order(2)
 	@DisplayName("👍 Listar todos os Usuários!")
 	public void deveMostrarTodosUsuarios() {
-		ResponseEntity<String> resposta = testRestTemplate
-		.withBasicAuth("admin@email.com.br", "admin123")
+		ResponseEntity<String> resposta = testRestTemplate.withBasicAuth("admin@email.com.br", "admin123")
 		.exchange("/usuarios/all", HttpMethod.GET, null, String.class);
+		
 		assertEquals(HttpStatus.OK, resposta.getStatusCode());
 	}
 	
@@ -90,10 +88,12 @@ public class UsuarioControllerTest {
 	@DisplayName("😳 Alterar Usuário!")
 	public void deveRealizarPutUsuario() {
 		HttpEntity<Usuario> request = new HttpEntity<Usuario>(usuarioUpdate);
-		ResponseEntity<Usuario> resposta = testRestTemplate
-		.withBasicAuth("admin@email.com.br", "admin123")
+		
+		ResponseEntity<Usuario> resposta = testRestTemplate.withBasicAuth("admin@email.com.br", "admin123")
 		.exchange("/usuarios/alterar", HttpMethod.PUT, request, Usuario.class);
+		
 		assertEquals(HttpStatus.OK, resposta.getStatusCode());
+		
 	}
 
 }
