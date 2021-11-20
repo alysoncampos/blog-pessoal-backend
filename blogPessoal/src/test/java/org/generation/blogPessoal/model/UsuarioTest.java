@@ -3,8 +3,6 @@ package org.generation.blogPessoal.model;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -18,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class UsuarioTest {
@@ -33,8 +32,8 @@ public class UsuarioTest {
 	@BeforeEach
 	public void start() {
 		
-		LocalDate data = LocalDate.parse("2000-07-22", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		usuario = new Usuario(0L, "João da Silva", "joão@email.com.br", "13465278", data);
+		//LocalDate data = LocalDate.parse("2000-07-22", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		usuario = new Usuario(0L, "João da Silva", "joão@email.com.br", "13465278");
 		
 	}
 	
@@ -47,6 +46,7 @@ public class UsuarioTest {
 		System.out.println(violacao.toString());
 		
 		assertTrue(violacao.isEmpty());
+		
 	}
 	
 	@Test

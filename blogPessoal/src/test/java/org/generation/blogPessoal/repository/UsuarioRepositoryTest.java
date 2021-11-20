@@ -3,9 +3,8 @@ package org.generation.blogPessoal.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import org.generation.blogPessoal.model.Usuario;
 import org.junit.jupiter.api.AfterAll;
@@ -27,34 +26,21 @@ public class UsuarioRepositoryTest {
 	@BeforeAll
 	void start(){
 		
-		LocalDate data = LocalDate.parse("2000-07-22",
-		DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		//LocalDate data = LocalDate.parse("2000-07-22", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		
-		Usuario usuario = new Usuario(0, "João da Silva",
-		"joao@email.com.br", "13465278", data);
-		if(!usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
-			usuarioRepository.save(usuario);
+		usuarioRepository.save(new Usuario(0, "João da Silva", "joao@email.com.br", "13465278"));
 		
-		usuario = new Usuario(0, "Manuel da Silva",
-		"manuel@email.com.br", "13465278", data);
-		if(!usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
-			usuarioRepository.save(usuario);
-				
-		usuario = new Usuario(0, "Frederico da Silva",
-		"frederico@email.com.br", "13465278", data);
-		if(!usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
-			usuarioRepository.save(usuario);
-				
-		usuario = new Usuario(0, "Paulo Antunes",
-		"paulo@email.com.br", "13465278", data);
-		if(!usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
-			usuarioRepository.save(usuario);
+		usuarioRepository.save(new Usuario(0L, "Manuela da Silva", "manuela@email.com.br", "13465278"));
+		
+		usuarioRepository.save(new Usuario(0L, "Adriana da Silva", "adriana@email.com.br", "13465278"));
+		
+		usuarioRepository.save(new Usuario(0L, "Paulo Antunes", "paulo@email.com.br", "13465278"));
 		
 	}
 	
 	@Test
-	@DisplayName("💾 Retorna o nome")
-	public void findByNomeRetornaNome(){
+	@DisplayName("Retorna o nome")
+	public void deveRetornarNome(){
 		
 		Usuario usuario = usuarioRepository.findByNome("João da Silva");
 		assertTrue(usuario.getNome().equals("João da Silva"));
@@ -62,11 +48,22 @@ public class UsuarioRepositoryTest {
 	}
 	
 	@Test
-	@DisplayName("💾 Retorna 3 usuarios")
-	public void findAllByNomeContainingIgnoreCaseRetornaTresUsuarios() {
-		List<Usuario> listaDeUsuarios = usuarioRepository
-		.findAllByNomeContainingIgnoreCase("Silva");
+	@DisplayName("Retorna 1 usuario")
+	public void deveRetornarUmUsuario() {
+		
+		Optional<Usuario> usuario = usuarioRepository.findByUsuario("joao@email.com.br");
+		assertTrue(usuario.get().getUsuario().equals("joao@email.com.br"));
+		
+	}
+	
+	@Test
+	@DisplayName("Retorna 3 usuarios")
+	public void deveRetornarTresUsuarios() {
+		List<Usuario> listaDeUsuarios = usuarioRepository.findAllByNomeContainingIgnoreCase("Silva");
 		assertEquals(3, listaDeUsuarios.size());
+		assertTrue(listaDeUsuarios.get(0).getNome().equals("João da Silva"));
+		assertTrue(listaDeUsuarios.get(1).getNome().equals("Manuela da Silva"));
+		assertTrue(listaDeUsuarios.get(2).getNome().equals("Adriana da Silva"));
 		
 	}
 
@@ -75,6 +72,5 @@ public class UsuarioRepositoryTest {
 		System.out.println("Teste Finalizado!");
 	
 	}
-
 
 }

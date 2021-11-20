@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,24 +22,23 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
-@Table(name = "tb_usuario")
+@Table(name = "tb_usuarios")
 public class Usuario {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@NotBlank(message = "O atributo Nome é Obrigatório!")
+	@NotNull(message = "O atributo Nome é Obrigatório!")
 	@Size(min = 5, max = 100,
 	message = "O atributo nome deve ter no mínimo 05 e no máximo 100 caracteres")
 	private String nome;
 	
 	@ApiModelProperty(example = "email@email.com.br")
-	@NotBlank(message = "O atributo Usuário é Obrigatório!")
+	@NotNull(message = "O atributo Usuário é Obrigatório!")
 	@Email(message = "O atributo Usuário deve ser um email válido!")
 	private String usuario;
 	
-	@Size(min = 5, max = 1000)
 	private String foto;
 	
 	@NotBlank(message = "O atributo Senha é Obrigatório!")
@@ -53,19 +53,16 @@ public class Usuario {
 	@JsonIgnoreProperties("usuario")
 	private List<Postagem> postagem;
 
-	public Usuario(long id, String nome, String usuario, String senha, 
-	LocalDate dataNascimento) {
+	public Usuario(long id, String nome, String usuario, String senha) {
+		
 		this.id = id;
 		this.nome = nome;
 		this.usuario = usuario;
 		this.senha = senha;
-		this.dataNascimento = dataNascimento;
+		//this.dataNascimento = dataNascimento;
 	}
 	
-	public Usuario() {
-			
-	}
-	
+	public Usuario() {}
 	
 	public long getId() {
 		return id;
@@ -122,6 +119,5 @@ public class Usuario {
 	public void setPostagem(List<Postagem> postagem) {
 		this.postagem = postagem;
 	}
-	
 	
 }
