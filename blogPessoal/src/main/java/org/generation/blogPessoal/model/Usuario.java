@@ -38,6 +38,9 @@ public class Usuario {
 	@Email(message = "O atributo Usuário deve ser um email válido!")
 	private String usuario;
 	
+	@Size(min = 5, max = 1000)
+	private String foto;
+	
 	@NotBlank(message = "O atributo Senha é Obrigatório!")
 	@Size(min = 8, message = "A senha deve ser no mínimo 8 caracteres.")
 	private String senha;
@@ -62,7 +65,8 @@ public class Usuario {
 	public Usuario() {
 			
 	}
-
+	
+	
 	public long getId() {
 		return id;
 	}
@@ -85,6 +89,14 @@ public class Usuario {
 
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
+	}
+	
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 
 	public String getSenha() {
