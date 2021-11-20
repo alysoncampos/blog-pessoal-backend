@@ -1,6 +1,7 @@
 package org.generation.blogPessoal.service;
 
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.codec.binary.Base64;
@@ -16,6 +17,7 @@ public class UsuarioService {
 	
 	@Autowired
 	private UsuarioRepository repository;
+	
 	
 	public Usuario CadastrarUsuario(Usuario usuario) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
