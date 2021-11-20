@@ -9,47 +9,84 @@ import org.generation.blogPessoal.model.UserLogin;
 import org.generation.blogPessoal.model.Usuario;
 import org.generation.blogPessoal.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UsuarioService {
 	
 	@Autowired
-	private UsuarioRepository repository;
+	private UsuarioRepository usuarioRepository;
 	
 	
-	public Usuario CadastrarUsuario(Usuario usuario) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
 		
-		String senhaEncoder = encoder.encode(usuario.getSenha());
-		usuario.setSenha(senhaEncoder);
+		if(usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent()) 
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe", null);
 		
-		return repository.save(usuario);
+		usuario.setSenha(criptografarSenha(usuario.getSenha()));
+		return Optional.of(usuarioRepository.save(usuario));
+			
+	}	
+	
+	public Optional<Usuario> atualizarUsuario(Usuario usuario) {
+		
+		if(usuarioRepository.findById(usuario.getId()).isPresent()) {
+			Optional<Usuario> buscaUsuario = usuarioRepository.findByUsuario(usuario.getUsuario());
+			
+			if (buscaUsuario.isPresent()) {
+				if(buscaUsuario.get().getId() != usuario.getId())
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe", null);
+			}
+			
+			usuario.setSenha(criptografarSenha(usuario.getSenha()));
+			return Optional.of(usuarioRepository.save(usuario));
+			
+		}
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado", null);
 			
 	}
 	
-	public Optional<UserLogin> Logar(Optional<UserLogin> user){
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		Optional<Usuario> usuario = repository.findByUsuario(user.get().getUsuario());
+	public Optional<UserLogin> logarUsuario(Optional<UserLogin> userLogin){
+		Optional<Usuario> usuario = usuarioRepository.findByUsuario(userLogin.get().getUsuario());
 		
-		if (usuario.isPresent()) {
-			if (encoder.matches(user.get().getSenha(), usuario.get().getSenha())) {
+		if(usuario.isPresent()) {
+			if(compararSenhas(userLogin.get().getSenha(), usuario.get().getSenha())) {
 				
-				String auth = user.get().getUsuario() + ":" + user.get().getSenha();
-				byte[] encodeAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
-				String authHeader = "Basic " + new String(encodeAuth);
+				userLogin.get().setId(usuario.get().getId());				
+				userLogin.get().setNome(usuario.get().getNome());
+				userLogin.get().setFoto(usuario.get().getFoto());
+				userLogin.get().setSenha(usuario.get().getSenha());
+				userLogin.get().setToken(generatorBasicToken(userLogin.get().getUsuario(), userLogin.get().getSenha()));
 				
-				user.get().setToken(authHeader);
-				user.get().setNome(usuario.get().getNome());
+				return userLogin;
 				
-				return user;
-				
-			}
+			}	
 		}
+		throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos", null);
+			
+	}
+	
+	private String criptografarSenha(String senha) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String senhaEncoder = encoder.encode(senha);
+		return senhaEncoder;
+	
+	}
+	
+	private boolean compararSenhas(String senhaDigitada, String senhaBanco) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.matches(senhaDigitada, senhaBanco);
 		
-		return null;
-		
+	}	
+	
+	private String generatorBasicToken(String email, String password) {
+		String structure = email + ":" + password;
+		byte[] structureBase64 = Base64.encodeBase64(structure.getBytes(Charset.forName("US-ASCII")));
+		return "Basic " + new String(structureBase64);
+				
 	}
 
 }

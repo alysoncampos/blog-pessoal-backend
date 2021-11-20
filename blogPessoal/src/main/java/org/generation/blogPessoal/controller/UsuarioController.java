@@ -48,15 +48,15 @@ public class UsuarioController {
 	
 	@PostMapping("/logar")
 	public ResponseEntity<UserLogin> autentication(@Valid @RequestBody Optional<UserLogin> user){
-		return usuarioService.Logar(user).map(resp -> ResponseEntity.ok(resp))
+		return usuarioService.logarUsuario(user).map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
 		
 	}
 	
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Usuario> post(@Valid @RequestBody Usuario usuario){
+	public ResponseEntity<Optional<Usuario>> post(@Valid @RequestBody Usuario usuario){
 		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(usuarioService.CadastrarUsuario(usuario));
+				.body(usuarioService.cadastrarUsuario(usuario));
 		
 	}
 	
