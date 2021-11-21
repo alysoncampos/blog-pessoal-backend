@@ -24,21 +24,21 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/postagens")
-@CrossOrigin(value = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PostagemController {
 	
 	@Autowired
-	private PostagemRepository repository;
+	private PostagemRepository postagemRepository;
 	
 	@GetMapping
 	public ResponseEntity<List<Postagem>> getAll(){
-		return ResponseEntity.ok(repository.findAll());
+		return ResponseEntity.ok(postagemRepository.findAll());
 		
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> getById(@PathVariable long id) {
-		return repository.findById(id)
+		return postagemRepository.findById(id)
 				.map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
 		
@@ -46,21 +46,21 @@ public class PostagemController {
 	
 	@GetMapping("/titulo/{titulo}")
 	public ResponseEntity<List<Postagem>> getByTitulo(@PathVariable String titulo){
-		return ResponseEntity.ok(repository.findAllByTituloContainingIgnoreCase(titulo));
+		return ResponseEntity.ok(postagemRepository.findAllByTituloContainingIgnoreCase(titulo));
 		
 	}
 	
 	@PostMapping
 	public ResponseEntity<Postagem> post(@Valid @RequestBody Postagem postagem){
 		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(repository.save(postagem));
+				.body(postagemRepository.save(postagem));
 		
 	}
 	
 	@PutMapping
 	public ResponseEntity<Postagem> put(@Valid @RequestBody Postagem postagem){
-		return repository.findById(postagem.getId())
-				.map(resp -> ResponseEntity.status(HttpStatus.OK).body(repository.save(postagem)))
+		return postagemRepository.findById(postagem.getId())
+				.map(resp -> ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem)))
 				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
 				
 	}
@@ -68,10 +68,10 @@ public class PostagemController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping ("/{id}")
 	public void delete(@PathVariable long id) {
-		Optional<Postagem> post = repository.findById(id);
+		Optional<Postagem> post = postagemRepository.findById(id);
 		if(post.isEmpty())
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-		repository.deleteById(id);
+		postagemRepository.deleteById(id);
 		
 	}
 	

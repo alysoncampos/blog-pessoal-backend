@@ -1,4 +1,4 @@
-package org.generation.blogPessoal.seguranca;
+package org.generation.blogPessoal.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +22,7 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{
 		auth.userDetailsService(userDetailsService);
 		
 		auth.inMemoryAuthentication().withUser("boaz").password(passwordEncoder().encode("boaz"))
-		.authorities("ROL_ADMIN");
+		.authorities("ROL_USER");
 		
 	}
 	
