@@ -42,8 +42,8 @@ public class UsuarioRepositoryTest {
 	@DisplayName("Retorna o nome")
 	public void deveRetornarNome(){
 		
-		Usuario usuario = usuarioRepository.findByNome("João da Silva");
-		assertTrue(usuario.getNome().equals("João da Silva"));
+		Optional<Usuario> usuario = usuarioRepository.findByNome("João da Silva");
+		assertTrue(usuario.get().getNome().equals("João da Silva"));
 		
 	}
 	
