@@ -39,11 +39,13 @@ public class Usuario {
 	@Email(message = "O atributo Usuário deve ser um email válido!")
 	private String usuario;
 	
-	private String foto;
-	
 	@NotBlank(message = "O atributo Senha é Obrigatório!")
 	@Size(min = 8, message = "A senha deve ser no mínimo 8 caracteres.")
 	private String senha;
+	
+	private String foto;
+	
+	private String tipo;
 	
 	@Column(name = "dt_nascimento")
 	@JsonFormat(pattern = "yyyy-MM-dd")
@@ -59,7 +61,7 @@ public class Usuario {
 		this.nome = nome;
 		this.usuario = usuario;
 		this.senha = senha;
-		//this.dataNascimento = dataNascimento;
+		
 	}
 	
 	public Usuario() {}
@@ -87,14 +89,6 @@ public class Usuario {
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
-	
-	public String getFoto() {
-		return foto;
-	}
-
-	public void setFoto(String foto) {
-		this.foto = foto;
-	}
 
 	public String getSenha() {
 		return senha;
@@ -104,6 +98,23 @@ public class Usuario {
 		this.senha = senha;
 	}
 	
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+	
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	
 	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}
@@ -112,6 +123,7 @@ public class Usuario {
 		this.dataNascimento = dataNascimento;
 	}
 
+	
 	public List<Postagem> getPostagem() {
 		return postagem;
 	}
