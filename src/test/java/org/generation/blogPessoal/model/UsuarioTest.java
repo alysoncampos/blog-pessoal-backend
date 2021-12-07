@@ -33,7 +33,7 @@ public class UsuarioTest {
 	public void start() {
 		
 		//LocalDate data = LocalDate.parse("2000-07-22", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		usuario = new Usuario(0L, "João da Silva", "joão@email.com.br", "13465278");
+		usuario = new Usuario(0L, "João da Silva", "joão@email.com.br", "13465278", "admin", "foto");
 		
 	}
 	
