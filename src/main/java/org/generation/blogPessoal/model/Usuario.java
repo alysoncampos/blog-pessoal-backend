@@ -122,7 +122,6 @@ public class Usuario {
 	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
-
 	
 	public List<Postagem> getPostagem() {
 		return postagem;
