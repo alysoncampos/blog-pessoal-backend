@@ -47,21 +47,21 @@ public class TemaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Tema> post(@Valid @RequestBody Tema tema){
+	public ResponseEntity<Tema> postTema(@Valid @RequestBody Tema tema){
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(temaRepository.save(tema));
 	}
 	
 	@PutMapping
-	public ResponseEntity<Tema> put(@Valid @RequestBody Tema tema){
+	public ResponseEntity<Tema> putTema(@Valid @RequestBody Tema tema){
 		return temaRepository.findById(tema.getId())
-				.map(resp -> ResponseEntity.status(HttpStatus.CREATED).body(temaRepository.save(tema)))
+				.map(resp -> ResponseEntity.status(HttpStatus.OK).body(temaRepository.save(tema)))
 				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());	
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable long id) {
+	public void deleteTema(@PathVariable long id) {
 		Optional<Tema> tema = temaRepository.findById(id);
 		if(tema.isEmpty())
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
